@@ -34,10 +34,10 @@ router.post('/searchVideo', (req, res, next) => {
 				let z = JSON.parse(response.body);
 
 				if(z !== null && z[0] !== undefined) {
-					console.log(z[0]);
+					// console.log(z[0]);
 					// fetch video data
 					isFound = true;
-					return res.json({ isFound });
+					return res.json({ isFound, data: z[0] });
 				}
 				else {
 					isFound = false;
