@@ -1,0 +1,29 @@
+<header>
+	<nav>
+		<li>
+			<a href="/">Home</a>
+		</li>
+		<li>
+			<a href="/admin/add-product">Add Product</a>
+		</li>
+		<li>
+			<a href="/user/products">Products</a>
+		</li>
+		<li>
+			<a href="/user/cart">Cart</a>
+		</li>
+		<% if(!isAuthenticated) { %>
+			<li>
+				<a href="/login">Login</a>
+			</li>
+		<% } else { %>
+			<li>
+				<form action="/logout" method="POST">
+	                  <button class="btn btn-secondary p-2" type="submit" style="border: none; background: transparent; color: goldenrod; cursor: pointer;">
+	                  	LOGOUT
+	                  </button>
+	            </form>
+			</li>
+		<% } %>
+	</nav>
+</header>

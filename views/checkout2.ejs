@@ -1,0 +1,25 @@
+<%- include('./include/head.ejs') %>
+
+</head>
+<body>
+
+  <h1>Subscription</h1>
+
+    <div class="centered">
+      <button id="order-btn" class="btn">ORDER</button>
+
+        <script src="https://js.stripe.com/v3/"></script>
+
+        <script>
+            const stripe = Stripe('pk_test_51Mh4xmSBkYpjR2KPH4xtsa98OyCkDjOqsYV21tSvXPs2aC6R2OCcHDz1AuqIylBVgNM8H4vuZSb9H6MDlt2Q1kXO00RZsUgyB4');
+            const orderBtn = globalThis.document.getElementById('order-btn');
+
+            orderBtn.addEventListener('click', function() {
+                stripe.redirectToCheckout({
+                    sessionId: '<%= sessionId %>'
+                });
+            });
+        </script>
+    </div>
+
+<%- include('./include/end.ejs') %>
