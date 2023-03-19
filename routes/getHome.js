@@ -55,56 +55,40 @@ router.post('/videos', (req, res, next) => {
                   else {
                     let x = JSON.parse(response.body);
                     // console.log(x);
-                    if (x !== null && x[0] !== undefined) {
+                    if (x !== null) {
                       // console.log('ALL', x[0]);
-                      isExpired = false;
-                      array.push({ 'slider': x[0] });
-                    }
-                    else {
-                      isExpired = true;
-                      return res.json({ isExpired });
+                      array.push({ "category": "silder", "child": x });
+
+                      let opt2 = selectFunction("select * from videos ORDER BY timestamp ASC limit 5");
+                      request(opt2, function (error, response) {
+                        if (error) throw new Error(error);
+                        else {
+                          let y = JSON.parse(response.body);
+                          if (y !== null) {
+                            // console.log('ASC', y[0]);
+                            array.push({ "category": "asc", "child": y });
+
+                            let opt3 = selectFunction("select * from videos ORDER BY timestamp DESC limit 5");
+
+                            request(opt3, function (error, response) {
+                              if (error) throw new Error(error);
+                              else {
+                                let z = JSON.parse(response.body);
+                                if (z !== null) {
+                                  // console.log('DESC', z);
+                                  isExpired = false;
+                                  array.push({ "category": "desc", "child": z });
+                                  // console.log(array);
+                                  return res.json({ isExpired, data: array });
+                                }
+                              }
+                            });
+                          }
+                        }
+                      });
                     }
                   }
                 });
-
-                let opt2 = selectFunction("select * from videos ORDER BY timestamp ASC limit 5");
-
-                request(opt2, function (error, response) {
-                  if (error) throw new Error(error);
-                  else {
-                    let y = JSON.parse(response.body);
-                    if (y !== null && y[0] !== undefined) {
-                      // console.log('ASC', y[0]);
-                      isExpired = false;
-                      array.push({ 'asc': y[0] });
-                    }
-                    else {
-                      isExpired = true;
-                      return res.json({ isExpired });
-                    }
-                  }
-                });
-
-                let opt3 = selectFunction("select * from videos ORDER BY timestamp DESC limit 5");
-
-                request(opt3, function (error, response) {
-                  if (error) throw new Error(error);
-                  else {
-                    let z = JSON.parse(response.body);
-                    if (z !== null && z[0] !== undefined) {
-                      // console.log('DESC', z[0]);
-                      isExpired = false;
-                      array.push({ 'desc': z[0] });
-                      // console.log(array);
-                      return res.json({ isExpired, data: array });
-                    }
-                    else {
-                      isExpired = true;
-                      return res.json({ isExpired });
-                    }
-                  }
-                });
-
               }
               else {
                 isExpired = true;
