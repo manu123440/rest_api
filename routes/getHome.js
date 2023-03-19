@@ -27,6 +27,7 @@ router.post('/videos', (req, res, next) => {
       .concat("'")
   );  
 	let isExpired = false;
+  let array = [];
 
   try{
     request(opt1, async (error, response) => {
@@ -57,6 +58,7 @@ router.post('/videos', (req, res, next) => {
                     if (x !== null && x[0] !== undefined) {
                       // console.log('ALL', x[0]);
                       isExpired = false;
+                      array.push(x[0]);
                     }
                     else {
                       isExpired = true;
@@ -70,10 +72,11 @@ router.post('/videos', (req, res, next) => {
                 request(opt2, function (error, response) {
                   if (error) throw new Error(error);
                   else {
-                    let x = JSON.parse(response.body);
-                    if (x !== null && x[0] !== undefined) {
-                      // console.log('ASC', x[0]);
+                    let y = JSON.parse(response.body);
+                    if (y !== null && y[0] !== undefined) {
+                      // console.log('ASC', y[0]);
                       isExpired = false;
+                      array.push(y[0]);
                     }
                     else {
                       isExpired = true;
@@ -87,11 +90,13 @@ router.post('/videos', (req, res, next) => {
                 request(opt3, function (error, response) {
                   if (error) throw new Error(error);
                   else {
-                    let x = JSON.parse(response.body);
-                    if (x !== null && x[0] !== undefined) {
-                      // console.log('DESC', x[0]);
+                    let z = JSON.parse(response.body);
+                    if (z !== null && z[0] !== undefined) {
+                      // console.log('DESC', z[0]);
                       isExpired = false;
-                      return res.json({ isExpired });
+                      array.push(z[0]);
+                      // console.log(array);
+                      return res.json({ isExpired, data: array });
                     }
                     else {
                       isExpired = true;
