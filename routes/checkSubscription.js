@@ -43,17 +43,26 @@ router.post('/checkSubscription',async (req, res, next) => {
         			// console.log(sub_id);
 
         			const subscription = await Stripe.retrieveSubscription(sub_id);
-					// console.log(subscription);
+					// console.log(subscription.current_period_start, subscription.current_period_end);
+					const start = subscription.current_period_start * 1000;
+					const end = subscription.current_period_end * 1000;
+					const startDate = new Date(start).getTime();
+					const endDate = new Date(end).getTime();
+					const diffTime = endDate - startDate;
+					const daysLeft = diffTime / (1000 * 60 * 60 * 24);
+					// console.log(daysLeft);
+
 					if(subscription.status === 'active' || subscription.status === 'trialing') {
 					 	isActive = true;
 					 	return res.json({
-					 		isActive
+					 		isActive,
+					 		daysLeft
 						})
 					}
 					else {
 					 	isActive = false;
-					  return res.json({
-					  	isActive
+					  	return res.json({
+					  		isActive
 						})
 					}
         		}
