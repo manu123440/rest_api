@@ -27,7 +27,7 @@ let updateFunction = (item, item2) => {
 
 router.post('/checkout', async (req, res, next) => {
 	// console.log(req.body.product);
-	const email = 'billu123@gmail.com';
+	const email = req.body.email;
 
 	let productType = req.body.product;
 	let product = '';
