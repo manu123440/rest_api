@@ -6,7 +6,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const nodemailer = require("nodemailer");
 
 router.post('/webhooks', express.raw({type: 'application/json'}), async (req, res, next) => {
-    const endpointSecret = process.env.ENDPOINT_SECRET;
+    const endpointSecret = 'whsec_pjE9ctXjGrADbM1unqOj0MeWlE8BisD4';
 
     const sig = req.headers['stripe-signature'];
     const payload = req.body;
