@@ -9,8 +9,8 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Stripe = require("./stripe");
 
 const products = {
-	basic: 'price_1MitaZSBkYpjR2KPp3wWXBLc',
-	pro: 'price_1MiteYSBkYpjR2KPd1K9PL0i'
+	basic: 'price_1Mn2HzSBkYpjR2KP768PkhED',
+	pro: 'price_1Mn2KoSBkYpjR2KP5bl1vJqx'
 }
 
 let updateFunction = (item, item2) => {
