@@ -66,9 +66,4 @@ router.post('/login', (req, res, next) => {
     }
 })
 
-router.get('/home', (req, res, next) => {
-  // console.log(req.session);
-  return res.send('lol');
-})
-
 module.exports = router;
