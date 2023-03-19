@@ -30,8 +30,8 @@ const createCheckoutSession = async (customer, price) => {
         quantity: 1,
       },
     ],
-    success_url: `http://localhost:3000/v1/success`, // => http://localhost:3000
-		cancel_url: 'http://localhost:3000' + '/v1/cancel'
+    success_url: 'https://rest-api-9oey.onrender.com/v1/success', // => http://localhost:3000
+		cancel_url: 'https://rest-api-9oey.onrender.com' + '/v1/cancel'
   });
 
   return session;
