@@ -58,7 +58,7 @@ router.post('/videos', (req, res, next) => {
                     if (x !== null && x[0] !== undefined) {
                       // console.log('ALL', x[0]);
                       isExpired = false;
-                      array.push(x[0]);
+                      array.push({ 'slider': x[0] });
                     }
                     else {
                       isExpired = true;
@@ -76,7 +76,7 @@ router.post('/videos', (req, res, next) => {
                     if (y !== null && y[0] !== undefined) {
                       // console.log('ASC', y[0]);
                       isExpired = false;
-                      array.push(y[0]);
+                      array.push({ 'asc': y[0] });
                     }
                     else {
                       isExpired = true;
@@ -94,7 +94,7 @@ router.post('/videos', (req, res, next) => {
                     if (z !== null && z[0] !== undefined) {
                       // console.log('DESC', z[0]);
                       isExpired = false;
-                      array.push(z[0]);
+                      array.push({ 'desc': z[0] });
                       // console.log(array);
                       return res.json({ isExpired, data: array });
                     }
