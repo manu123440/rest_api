@@ -57,7 +57,7 @@ router.post('/videos', (req, res, next) => {
                     // console.log(x);
                     if (x !== null) {
                       // console.log('ALL', x[0]);
-                      array.push({ "category": "silder", "child": x });
+                      array.push({ "category": "slider", "child": x });
 
                       let opt2 = selectFunction("select * from videos ORDER BY timestamp ASC limit 5");
                       request(opt2, function (error, response) {
