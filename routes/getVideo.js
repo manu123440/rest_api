@@ -61,11 +61,11 @@ router.post('/video', async (req, res, next) => {
 									else {
 									  let z = JSON.parse(response.body);
 
-									  if (z !== null && z[0] !== undefined) {
+									  if (z !== null) {
 									    // console.log(z[0]);
 									    isExpired = false;
 									   	// fetch video data
-											return res.json({ isExpired, data: z[0] });
+											return res.json({ isExpired, data: z });
 									  }
 									  else {
 											isExpired = true;
