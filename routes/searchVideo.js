@@ -1,5 +1,7 @@
 const express = require('express');
 
+const request = require('request-promise-any');
+
 const router = express.Router();
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -18,14 +20,14 @@ let selectFunction = (item) => {
 };
 
 router.post('/searchVideo', (req, res, next) => {
-	const { title } = req.params;
+	const { title } = req.query;
 	let isFound = false;
 
 	try {
 		let opt1 = selectFunction(
-			"select * from videos where title LIKE %"
+			"select * from videos where title LIKE '%"
 			.concat(`${title}`)
-			.concat("%")
+			.concat("%'")
 		);
 
 		request(opt1, (error, response) => {
@@ -33,11 +35,11 @@ router.post('/searchVideo', (req, res, next) => {
 			else {
 				let z = JSON.parse(response.body);
 
-				if(z !== null && z[0] !== undefined) {
+				if(z !== null) {
 					// console.log(z[0]);
 					// fetch video data
 					isFound = true;
-					return res.json({ isFound, data: z[0] });
+					return res.json({ isFound, data: z });
 				}
 				else {
 					isFound = false;
