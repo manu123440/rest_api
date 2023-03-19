@@ -1,5 +1,4 @@
 const stripe = require('stripe');
-// const STRIPE_SECRET_KEY = 'sk_test_51Mh4xmSBkYpjR2KPbQizwOH8RDvDRpwmpWEaVOZF8z0txrJIhnpMpjdPgECqZ8FRUi9HUgNOCfG29T4FYwAZbZ0y00K3xYonjV'
 
 const Stripe = stripe(process.env.STRIPE_SECRET_KEY, {
 	apiVersion: '2020-08-27'
