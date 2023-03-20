@@ -53,7 +53,7 @@ router.post('/video', async (req, res, next) => {
 								let opt1 = selectFunction(
 										"select * from videos LIMIT "
 						        .concat(`${offset}`)
-						        .concat(", 1")
+						        .concat(", 5")
 						    );
 
 								request(opt1, (error, response) => {
