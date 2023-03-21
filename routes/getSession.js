@@ -24,32 +24,35 @@ router.post('/listSession', async (req, res, next) => {
 	let isActive = false;
 
 	let opt1 = selectFunction(
-	    "select session_id from users where email = '"
-	      .concat(`${email}`)
-	      .concat("'")
+	  "select session_id from users where email = '"
+	    .concat(`${email}`)
+	    .concat("'")
 	);
 
 	try {
-		request(opt1, (error, response) => {
-	      	if (error) throw new Error(error);
-	      	else {
-	        	let z = JSON.parse(response.body);
-	        	if (z !== null && z[0] !== undefined) {
-	        		// console.log(z[0]);
-	        		isActive = true;
+		request(opt1, async (error, response) => {
+	    if (error) throw new Error(error);
+	    else {
+	      let z = JSON.parse(response.body);
+	      // console.log(z);
+	      if (z[0].session_id === 'null') {
+	      	isActive = false;
+					return res.json({
+					 	isActive,
+					 	session_id: 'null'
+					})
+	      }
+	      else {
+	      	const session = await stripe.checkout.sessions.retrieve(z[0].session_id);
+		     	console.log(session, session.subscription);
+		     	isActive = true;
 					return res.json({
 						isActive,
 					 	sessionId: z[0].session_id
 					})
-	        	}
-	        	else {
-	        		isActive = false;
-					return res.json({
-					 	isActive
-					})
-	        	}
-	        }
-	    })
+	      }
+	    }
+	  })
 	}
 	catch(err) {
 		isActive = false;
