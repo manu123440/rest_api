@@ -20,8 +20,13 @@ let selectFunction = (item) => {
 };
 
 router.post('/video', async (req, res, next) => {
-	const { offset } = req.query;
+	let { offset } = req.query;
 	const email = req.body.email;
+
+	if (offset < 0) {
+		offset = 0;
+	}
+
   let opt1 = selectFunction(
       "select session_id from users where email = '"
       .concat(`${email}`)
@@ -49,7 +54,6 @@ router.post('/video', async (req, res, next) => {
 
 						if(subscription.cancel_at_period_end !== true) {
 				      if(subscription.status === 'active' || subscription.status === 'trialing') {
-								isExpired = false;
 								let opt1 = selectFunction(
 										"select * from videos LIMIT "
 						        .concat(`${offset}`)
@@ -60,16 +64,16 @@ router.post('/video', async (req, res, next) => {
 						      if (error) throw new Error(error);
 									else {
 									  let z = JSON.parse(response.body);
+									  // console.log(z);
 
 									  if (z !== null) {
-									    // console.log(z[0]);
 									    isExpired = false;
 									   	// fetch video data
 											return res.json({ isExpired, data: z });
 									  }
 									  else {
-											isExpired = true;
-											return res.json({ isExpired });
+											isExpired = false;
+											return res.json({ isExpired, data: [] });
 										}
 									}
 								});
