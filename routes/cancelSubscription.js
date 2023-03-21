@@ -19,6 +19,18 @@ let selectFunction = (item) => {
   return options;
 };
 
+let updateFunction = (item, item2) => {
+	let options = {
+	    method: "POST",
+	    url: "https://itslocaltv.io/api/update.php",
+	    formData: {
+	      update_query: item,
+	      select_query: item2,
+	    },
+  	};
+  return options;
+};
+
 router.post('/cancelSubscription', async (req, res, next) => {
 	const email = req.body.email;
 
@@ -46,10 +58,37 @@ router.post('/cancelSubscription', async (req, res, next) => {
 						if(subscription.status !== 'canceled') {
 							const cancelSub = await Stripe.cancelSubscription(sub_id);
 							if(cancelSub.status === 'canceled') {
-								isCanceled = true;
-								return res.json({
-									isCanceled
-								})
+								let opt2 = updateFunction(
+						  		"update users SET session_id = 'null', plan = 'null', subs_date = 'null'"
+						  		.concat("where email = '")
+						  		.concat(`${email}`)
+						  		.concat("'"),
+						  		"select * from users where email = '"
+						        .concat(`${email}`)
+						        .concat("'")
+						  	)
+						  	// console.log(opt2);
+						  	request(opt2, async (error, response) => {
+							    if (error) throw new Error(error);
+							    else {
+							     	let y = JSON.parse(response.body);
+
+							     	// console.log(y);
+
+							     	if(y !== null && y[0] !== undefined) {
+											isCanceled = true;
+											return res.json({
+												isCanceled
+											})
+										}
+										else {
+											isCanceled = false;
+											return res.json({
+												isCanceled
+											})
+										}
+					       	}
+							  });
 							}
 							else {
 								isCanceled = false;
