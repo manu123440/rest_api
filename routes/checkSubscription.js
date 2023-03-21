@@ -32,56 +32,66 @@ router.post('/checkSubscription',async (req, res, next) => {
 
 	try {
 		request(opt1, async (error, response) => {
-      		if (error) throw new Error(error);
-      		else {
-        		let z = JSON.parse(response.body);
+      if (error) throw new Error(error);
+      else {
+       	let z = JSON.parse(response.body);
 
-        		if(z !== null && z[0] !== undefined) {
-        			const session_id = z[0].session_id;
-        			const session = await stripe.checkout.sessions.retrieve(session_id);
-        			const sub_id = session.subscription;
-        			// console.log(sub_id);
+       	if (z[0].session_id === 'null') {
+       		isActive = false;
+					return res.json({
+					  isActive
+					})
+       	}
+       	else {
+       		const session_id = z[0].session_id;
 
-        			const subscription = await Stripe.retrieveSubscription(sub_id);
-					// console.log(subscription.current_period_start, subscription.current_period_end);
-					const start = subscription.current_period_start * 1000;
-					const end = subscription.current_period_end * 1000;
-					const startDate = new Date(start).getTime();
-					const endDate = new Date(end).getTime();
-					const diffTime = endDate - startDate;
-					const daysLeft = diffTime / (1000 * 60 * 60 * 24);
-					// console.log(daysLeft);
+	       	const session = await stripe.checkout.sessions.retrieve(session_id);
+	       	// console.log(session, session.subscription);
+	       	const sub_id = session.subscription;
+	       	// console.log(sub_id);
 
-					if(subscription.status === 'active' || subscription.status === 'trialing') {
-					 	isActive = true;
-					 	return res.json({
-					 		isActive,
-					 		daysLeft
-						})
+	       	if (sub_id !== null) {
+		        const subscription = await Stripe.retrieveSubscription(sub_id);
+		        // console.log(subscription.status);
+						// console.log(subscription.current_period_start, subscription.current_period_end);
+						const start = subscription.current_period_start * 1000;
+						const end = subscription.current_period_end * 1000;
+						const startDate = new Date(start).getTime();
+						const endDate = new Date(end).getTime();
+						const diffTime = endDate - startDate;
+						const daysLeft = diffTime / (1000 * 60 * 60 * 24);
+						// console.log(daysLeft);
+
+						if(subscription.status === 'active' || subscription.status === 'trialing') {
+						 	isActive = true;
+						 	return res.json({
+						 		isActive,
+						 		daysLeft
+							})
+						}	
+						else {
+							isActive = false;
+							return res.json({
+								isActive
+							})
+						}						
 					}
 					else {
-					 	isActive = false;
-					  	return res.json({
-					  		isActive
+						isActive = false;
+						return res.json({
+							isActive
 						})
-					}
-        		}
-        		else {
-					isActive = false;
-					return res.json({
-					  	isActive
-					})
-				}
-        	}
-        })
+					}					
+		    }
+      }
+    })
 	}
 	catch(err) {
 		isActive = false;
-	  	return res.json({
-		  	isActive
+	  return res.json({
+	  	isActive
 		})
 	}
-
 })
 
 module.exports = router;
