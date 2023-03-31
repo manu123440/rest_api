@@ -22,6 +22,7 @@ const successRoute = require('./routes/success');
 const cancelRoute = require('./routes/cancel');
 const listSubscriptionRoute = require('./routes/listSubscription');
 const getSessionRoute = require('./routes/getSession');
+const episodesRoute = require('./routes/getEpisodes');
 
 const app = express();
 
@@ -50,6 +51,7 @@ app.use('/v1', cancelRoute);
 app.use('/v1', paymentRoute);
 app.use('/v1', listSubscriptionRoute);
 app.use('/v1', getSessionRoute);
+app.use('/v1', episodesRoute);
 
 app.listen(
 	PORT, 
